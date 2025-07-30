@@ -80,5 +80,13 @@ export class AppComponent {
   getTotalClassCount(): number {
     return this.categories.reduce((total, category) => total + category.classes.length, 0);
   }
+
+  getGradientClass(): string {
+    return 'from-blue-500 to-purple-500';
+  }
+
+  getAngularVersion(): string {
+    return '19.2.0';
+  }
 }
 

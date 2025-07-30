@@ -7,50 +7,96 @@ import { TailwindClass } from '../tailwind-data';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-      <!-- Header -->
-      <div class="p-4 border-b border-gray-200">
-        <h3 class="text-lg font-semibold text-gray-800">{{ tailwindClass?.tailwindClass || tailwindClass?.name }}</h3>
-        <p class="text-sm text-gray-600">{{ tailwindClass?.description }}</p>
-        <div class="mt-2">
-          <span class="inline-block bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+    <div class="bg-white rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-gray-200 group">
+      <!-- Header with gradient background -->
+      <div class="p-6 bg-gradient-to-br from-slate-50 via-white to-slate-50 border-b border-gray-100">
+        <div class="flex items-start justify-between mb-3">
+          <h3 class="text-xl font-bold text-gray-900 tracking-tight">
+            {{ tailwindClass?.tailwindClass || tailwindClass?.name }}
+          </h3>
+          <div [class]="getCategoryBadgeClasses()" class="shrink-0 ml-3">
+            <svg class="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path>
+            </svg>
             {{ tailwindClass?.category }}
-          </span>
+          </div>
         </div>
+        <p class="text-gray-700 leading-relaxed">{{ tailwindClass?.description }}</p>
       </div>
 
-      <!-- Live Demo -->
-      <div class="p-4 bg-gray-50">
-        <h4 class="text-sm font-medium text-gray-700 mb-2">Live Demo</h4>
-        <div class="border border-gray-300 rounded-lg overflow-hidden">
-          <div [class]="getContainerClasses()" class="min-h-20 flex items-center justify-center">
-            <div *ngIf="shouldUseHTMLDemo(); else textDemo" [innerHTML]="getDemoHTML()"></div>
+      <!-- Live Demo with improved styling -->
+      <div class="p-6 bg-gradient-to-br from-gray-50 to-gray-100">
+        <div class="flex items-center mb-4">
+          <div class="flex items-center">
+            <div class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+            <h4 class="text-sm font-semibold text-gray-900 uppercase tracking-wide">Live Demo</h4>
+          </div>
+        </div>
+        <div class="bg-white border-2 border-dashed border-gray-200 rounded-xl overflow-hidden shadow-inner hover:border-gray-300 transition-colors duration-200">
+          <div [class]="getContainerClasses()" class="min-h-24 flex items-center justify-center relative">
+            <!-- Demo content -->
+            <div *ngIf="shouldUseHTMLDemo(); else textDemo" [innerHTML]="getDemoHTML()" class="w-full"></div>
             <ng-template #textDemo>
-              <div [class]="getDemoClasses()">
+              <div [class]="getDemoClasses()" class="transition-all duration-200 hover:scale-105">
                 <span [class]="getTextClasses()">{{ getDemoText() }}</span>
               </div>
             </ng-template>
+            
+            <!-- Copy indicator (subtle) -->
+            <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              <button class="p-1 rounded bg-white shadow-sm border text-gray-400 hover:text-gray-600">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Code Preview -->
-      <div *ngIf="tailwindClass?.code" class="p-4">
-        <h4 class="text-sm font-medium text-gray-700 mb-2">Code Preview</h4>
-        <div class="bg-gray-100 border border-gray-300 rounded p-4 overflow-auto" [innerHTML]="getPreviewHTML()">
+      <!-- Code Preview with better styling -->
+      <div *ngIf="tailwindClass?.code" class="p-6 bg-gray-50 border-t border-gray-100">
+        <div class="flex items-center mb-4">
+          <svg class="w-4 h-4 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m-4 4l-4 4 4 4m6-8l4 4-4 4"></path>
+          </svg>
+          <h4 class="text-sm font-semibold text-gray-900 uppercase tracking-wide">Code Preview</h4>
+        </div>
+        <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-5 overflow-auto shadow-inner border border-gray-700" [innerHTML]="getPreviewHTML()">
         </div>
       </div>
 
-      <!-- CSS Equivalent -->
-      <div class="p-4 border-t border-gray-200">
-        <h4 class="text-sm font-medium text-gray-700 mb-2">CSS Equivalent</h4>
-        <pre class="bg-gray-900 text-green-400 p-3 rounded text-sm overflow-x-auto"><code>{{ tailwindClass?.cssEquivalent }}</code></pre>
+      <!-- CSS Equivalent with enhanced design -->
+      <div class="p-6 border-t border-gray-100">
+        <div class="flex items-center mb-4">
+          <svg class="w-4 h-4 text-emerald-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          <h4 class="text-sm font-semibold text-gray-900 uppercase tracking-wide">CSS Equivalent</h4>
+        </div>
+        <div class="relative">
+          <pre class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-emerald-400 p-5 rounded-xl text-sm overflow-x-auto shadow-inner border border-gray-700 font-mono leading-relaxed"><code>{{ tailwindClass?.cssEquivalent }}</code></pre>
+          <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <button class="p-1.5 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white transition-colors">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
 
-      <!-- Example Usage -->
-      <div *ngIf="tailwindClass?.example" class="p-4 border-t border-gray-200">
-        <h4 class="text-sm font-medium text-gray-700 mb-2">Example Usage</h4>
-        <pre class="bg-gray-100 text-gray-800 p-3 rounded text-sm overflow-x-auto"><code>{{ tailwindClass?.example }}</code></pre>
+      <!-- Example Usage with improved styling -->
+      <div *ngIf="tailwindClass?.example" class="p-6 border-t border-gray-100 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div class="flex items-center mb-4">
+          <svg class="w-4 h-4 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          </svg>
+          <h4 class="text-sm font-semibold text-gray-900 uppercase tracking-wide">Example Usage</h4>
+        </div>
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-indigo-100">
+          <pre class="text-gray-800 text-sm font-mono leading-relaxed whitespace-pre-wrap"><code>{{ tailwindClass?.example }}</code></pre>
+        </div>
       </div>
     </div>
   `
@@ -59,51 +105,99 @@ export class TailwindClassCardComponent {
   @Input() tailwindClass?: TailwindClass;
 
   getContainerClasses(): string {
-    if (!this.tailwindClass) return 'bg-white p-4';
+    if (!this.tailwindClass) return 'bg-white p-6';
     
     const category = this.tailwindClass.category;
-    let containerClasses = 'bg-white p-4';
+    let containerClasses = 'bg-white p-6 transition-all duration-200';
     
     switch (category) {
       case 'Layout':
       case 'Flexbox':
-        containerClasses += ' bg-blue-50 border-blue-300';
+        containerClasses += ' bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200';
         break;
       case 'Grid':
-        containerClasses += ' bg-green-50 border-green-300';
+        containerClasses += ' bg-gradient-to-br from-green-50 to-green-100 border-green-200';
         break;
       case 'Spacing':
-        containerClasses += ' bg-yellow-50 border-yellow-300';
+        containerClasses += ' bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200';
         break;
       case 'Typography':
-        containerClasses += ' bg-purple-50 border-purple-300';
+        containerClasses += ' bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200';
         break;
       case 'Colors':
-        containerClasses += ' bg-pink-50 border-pink-300';
+        containerClasses += ' bg-gradient-to-br from-pink-50 to-pink-100 border-pink-200';
         break;
       case 'Backgrounds':
-        containerClasses += ' bg-indigo-50 border-indigo-300';
+        containerClasses += ' bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200';
         break;
       case 'Borders':
-        containerClasses += ' bg-gray-50 border-gray-300';
+        containerClasses += ' bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200';
         break;
       case 'Effects':
-        containerClasses += ' bg-teal-50 border-teal-300';
+        containerClasses += ' bg-gradient-to-br from-teal-50 to-teal-100 border-teal-200';
         break;
       case 'Transitions':
-        containerClasses += ' bg-orange-50 border-orange-300';
+        containerClasses += ' bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200';
         break;
       case 'Transforms':
-        containerClasses += ' bg-red-50 border-red-300';
+        containerClasses += ' bg-gradient-to-br from-red-50 to-red-100 border-red-200';
         break;
       case 'Interactivity':
-        containerClasses += ' bg-emerald-50 border-emerald-300';
+        containerClasses += ' bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200';
         break;
       default:
-        containerClasses += ' bg-gray-50 border-gray-300';
+        containerClasses += ' bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200';
     }
     
     return containerClasses;
+  }
+
+  getCategoryBadgeClasses(): string {
+    if (!this.tailwindClass) return 'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800';
+    
+    const category = this.tailwindClass.category;
+    let badgeClasses = 'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide shadow-sm';
+    
+    switch (category) {
+      case 'Layout':
+      case 'Flexbox':
+        badgeClasses += ' bg-blue-100 text-blue-800 border border-blue-200';
+        break;
+      case 'Grid':
+        badgeClasses += ' bg-green-100 text-green-800 border border-green-200';
+        break;
+      case 'Spacing':
+        badgeClasses += ' bg-yellow-100 text-yellow-800 border border-yellow-200';
+        break;
+      case 'Typography':
+        badgeClasses += ' bg-purple-100 text-purple-800 border border-purple-200';
+        break;
+      case 'Colors':
+        badgeClasses += ' bg-pink-100 text-pink-800 border border-pink-200';
+        break;
+      case 'Backgrounds':
+        badgeClasses += ' bg-indigo-100 text-indigo-800 border border-indigo-200';
+        break;
+      case 'Borders':
+        badgeClasses += ' bg-gray-100 text-gray-800 border border-gray-200';
+        break;
+      case 'Effects':
+        badgeClasses += ' bg-teal-100 text-teal-800 border border-teal-200';
+        break;
+      case 'Transitions':
+        badgeClasses += ' bg-orange-100 text-orange-800 border border-orange-200';
+        break;
+      case 'Transforms':
+        badgeClasses += ' bg-red-100 text-red-800 border border-red-200';
+        break;
+      case 'Interactivity':
+        badgeClasses += ' bg-emerald-100 text-emerald-800 border border-emerald-200';
+        break;
+      default:
+        badgeClasses += ' bg-gray-100 text-gray-800 border border-gray-200';
+    }
+    
+    return badgeClasses;
   }
 
   getDemoClasses(): string {
@@ -116,25 +210,26 @@ export class TailwindClassCardComponent {
     // Add context classes based on category for better visibility
     switch (category) {
       case 'Spacing':
-        classes += ' bg-yellow-200 border border-yellow-400';
+        classes += ' bg-gradient-to-br from-yellow-200 to-yellow-300 border-2 border-yellow-400 shadow-sm';
         break;
       case 'Sizing':
-        classes += ' bg-blue-200 border border-blue-400';
+        classes += ' bg-gradient-to-br from-blue-200 to-blue-300 border-2 border-blue-400 shadow-sm';
         break;
       case 'Colors':
-        classes += ' p-4 rounded';
+        classes += ' p-6 rounded-lg shadow-md border-2 border-white';
         break;
       case 'Borders':
-        classes += ' p-4 bg-white';
+        classes += ' p-6 bg-white shadow-sm';
         break;
       case 'Effects':
-        classes += ' p-4 bg-white';
+        classes += ' p-6 bg-white rounded-lg';
         break;
       case 'Typography':
-        // Typography classes apply directly to text
+        // Typography classes apply directly to text with better spacing
+        classes += ' px-4 py-2';
         break;
       default:
-        classes += ' min-h-8';
+        classes += ' min-h-12 flex items-center justify-center rounded-lg shadow-sm';
     }
     
     return classes;
@@ -172,50 +267,50 @@ export class TailwindClassCardComponent {
     // Generate appropriate HTML based on class type
     if (category === 'Flexbox' || className.includes('flex')) {
       return `
-        <div class="${className} space-x-2 w-full">
-          <div class="bg-blue-200 p-2 rounded text-sm">Item 1</div>
-          <div class="bg-blue-300 p-2 rounded text-sm">Item 2</div>
-          <div class="bg-blue-400 p-2 rounded text-sm">Item 3</div>
+        <div class="${className} space-x-3 w-full max-w-md">
+          <div class="bg-gradient-to-br from-blue-400 to-blue-500 text-white p-3 rounded-lg shadow-md text-sm font-medium">Item 1</div>
+          <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-3 rounded-lg shadow-md text-sm font-medium">Item 2</div>
+          <div class="bg-gradient-to-br from-blue-600 to-blue-700 text-white p-3 rounded-lg shadow-md text-sm font-medium">Item 3</div>
         </div>
       `;
     }
     
     if (category === 'Grid' || className.includes('grid')) {
       return `
-        <div class="${className} gap-2 w-full">
-          <div class="bg-green-200 p-2 rounded text-center text-sm">A</div>
-          <div class="bg-green-300 p-2 rounded text-center text-sm">B</div>
-          <div class="bg-green-400 p-2 rounded text-center text-sm">C</div>
-          <div class="bg-green-500 p-2 rounded text-center text-sm">D</div>
+        <div class="${className} gap-3 w-full max-w-md">
+          <div class="bg-gradient-to-br from-green-400 to-green-500 text-white p-3 rounded-lg shadow-md text-center text-sm font-bold">A</div>
+          <div class="bg-gradient-to-br from-green-500 to-green-600 text-white p-3 rounded-lg shadow-md text-center text-sm font-bold">B</div>
+          <div class="bg-gradient-to-br from-green-600 to-green-700 text-white p-3 rounded-lg shadow-md text-center text-sm font-bold">C</div>
+          <div class="bg-gradient-to-br from-green-700 to-green-800 text-white p-3 rounded-lg shadow-md text-center text-sm font-bold">D</div>
         </div>
       `;
     }
     
     if (className.includes('absolute') || className.includes('relative') || className.includes('fixed')) {
       return `
-        <div class="relative w-32 h-24 bg-gray-200 border rounded">
-          <div class="${className} bg-red-400 p-1 rounded text-xs text-white">
+        <div class="relative w-40 h-32 bg-gradient-to-br from-gray-100 to-gray-200 border-2 border-gray-300 rounded-xl shadow-inner">
+          <div class="${className} bg-gradient-to-br from-red-500 to-red-600 text-white p-2 rounded-lg shadow-lg text-xs font-bold">
             Positioned
           </div>
         </div>
       `;
     }
     
-    return `<div class="${className} p-2 bg-gray-100 rounded">Demo Element</div>`;
+    return `<div class="${className} p-4 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg shadow-md border-2 border-gray-300 text-gray-800 font-medium">Demo Element</div>`;
   }
 
   getTextClasses(): string {
-    if (!this.tailwindClass) return 'text-gray-800';
+    if (!this.tailwindClass) return 'text-gray-800 font-medium';
     
     const category = this.tailwindClass.category;
     
     switch (category) {
       case 'Typography':
-        return 'text-gray-800';
+        return 'text-gray-900 leading-relaxed';
       case 'Colors':
-        return 'font-medium';
+        return 'font-semibold text-lg';
       default:
-        return 'text-sm text-gray-700';
+        return 'text-gray-700 font-medium';
     }
   }
 
